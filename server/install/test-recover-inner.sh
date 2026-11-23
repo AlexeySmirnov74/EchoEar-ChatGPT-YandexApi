@@ -2,6 +2,11 @@
 set -euo pipefail
 case_name=$1
 mkdir -p /etc/echowear/gateway /var/lib/echowear/{data,decoder-socket,search-socket} /etc/letsencrypt/live/test.example /test/bin
+mkdir -p /var/lib/echowear/admin/{state,socket}
+chown 10001:10001 /var/lib/echowear/admin/state
+chmod 700 /var/lib/echowear/admin/state
+chown 10001:0 /var/lib/echowear/admin/socket
+chmod 2770 /var/lib/echowear/admin/socket
 chown 10001:0 /var/lib/echowear/{decoder-socket,search-socket}
 chmod 2770 /var/lib/echowear/{decoder-socket,search-socket}
 cat >/test/bin/docker <<'EOF'
@@ -41,11 +46,14 @@ if [[ $case_name != no-marker ]]; then printf '%s\n' ECHOWEAR_INSTALL_V1 >/etc/e
 if [[ $case_name != incomplete ]]; then
   printf 'ECHOWEAR_DOMAIN=test.example\nYANDEX_FOLDER_ID=folderexample\n' >/etc/echowear/config.env
   chmod 600 /etc/echowear/config.env
-  for f in /etc/echowear/openai_key /etc/echowear/yandex_key /etc/echowear/gateway/ota_secret /etc/echowear/gateway/ws_token; do
+  for f in /etc/echowear/openai_key /var/lib/echowear/admin/password.json /etc/echowear/gateway/ota_secret /etc/echowear/gateway/ws_token; do
     printf 'FAKE_SECRET' >"$f"
     chmod 400 "$f"
   done
-  chown 10001:10001 /etc/echowear/yandex_key
+  chown 10001:10001 /var/lib/echowear/admin/password.json
+  printf 'FAKE_BUNDLE' >/var/lib/echowear/admin/state/yandex.json
+  chown 10001:10001 /var/lib/echowear/admin/state/yandex.json
+  chmod 600 /var/lib/echowear/admin/state/yandex.json
   printf 'cert' >/etc/letsencrypt/live/test.example/fullchain.pem
   printf 'key' >/etc/letsencrypt/live/test.example/privkey.pem
 fi
@@ -56,9 +64,9 @@ if [[ $case_name == other-hook ]]; then
   printf 'foreign hook' >/etc/letsencrypt/renewal-hooks/deploy/echowear-reload
 fi
 if [[ $case_name == success ]]; then
-  before=$(sha256sum /etc/echowear/{openai_key,yandex_key} /etc/echowear/gateway/{ota_secret,ws_token})
+  before=$(sha256sum /etc/echowear/openai_key /var/lib/echowear/admin/password.json /var/lib/echowear/admin/state/yandex.json /etc/echowear/gateway/{ota_secret,ws_token})
   bash /src/recover.sh
-  after=$(sha256sum /etc/echowear/{openai_key,yandex_key} /etc/echowear/gateway/{ota_secret,ws_token})
+  after=$(sha256sum /etc/echowear/openai_key /var/lib/echowear/admin/password.json /var/lib/echowear/admin/state/yandex.json /etc/echowear/gateway/{ota_secret,ws_token})
   [[ $before == "$after" ]]
   grep -q compose /test/actions
   grep -q systemctl /test/actions

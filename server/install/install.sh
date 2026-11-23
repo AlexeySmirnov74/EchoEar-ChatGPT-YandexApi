@@ -45,7 +45,7 @@ apt-get update
 apt-get install -y ca-certificates certbot docker.io docker-compose-v2 iproute2 openssl python3
 systemctl enable --now docker
 docker compose version >/dev/null
-for name in echowear-gateway echowear-voice-1 echowear-search-1 echowear-decoder-1 echowear_voice_1 echowear_search_1 echowear_decoder_1; do
+for name in echowear-gateway echowear-voice-1 echowear-search-1 echowear-decoder-1 echowear-admin-1 echowear_voice_1 echowear_search_1 echowear_decoder_1 echowear_admin_1; do
   if docker inspect "$name" >/dev/null 2>&1; then
     echo "Уже существует контейнер $name; установка не будет его изменять." >&2
     exit 1
@@ -73,6 +73,9 @@ openssl rand -hex 32 > /etc/echowear/gateway/ws_token
 chmod 0400 /etc/echowear/gateway/ota_secret /etc/echowear/gateway/ws_token
 printf 'ECHOWEAR_DOMAIN=%s\nYANDEX_FOLDER_ID=%s\n' "$domain" "$folder" > /etc/echowear/config.env
 chmod 0600 /etc/echowear/config.env
+echo 'Создание учётной записи панели: логин и пароль (не менее 16 символов).'
+python3 "$script_dir/../admin/prepare_state.py" --existing-key-file /etc/echowear/yandex_key --folder-id "$folder" --state-dir /var/lib/echowear/admin
+rm -- /etc/echowear/yandex_key
 
 install -d -m 0755 /etc/letsencrypt/renewal-hooks/deploy
 cat > /etc/letsencrypt/renewal-hooks/deploy/echowear-reload <<'EOF'
@@ -88,3 +91,4 @@ if ! bash "$script_dir/verify-install.sh"; then
 fi
 echo 'Контейнеры запущены. OTA-адрес можно показать командой:'
 printf 'sudo bash %q\n' "$script_dir/show-ota.sh"
+printf 'Панель: https://%s:18444/admin/\n' "$domain"

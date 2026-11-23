@@ -54,6 +54,27 @@ services:
     volumes:
       - /etc/echowear/gateway:/run/credentials:ro
       - /etc/letsencrypt:/run/certs:ro
+      - /var/lib/echowear/admin/socket:/run/echowear-admin:ro
+  admin:
+    build:
+      context: ../admin
+    restart: unless-stopped
+    network_mode: none
+    user: '10001:10001'
+    read_only: true
+    init: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    pids_limit: 32
+    mem_limit: 128m
+    logging:
+      driver: none
+    environment:
+      ECHOWEAR_ADMIN_ORIGIN: https://${ECHOWEAR_DOMAIN}:18444
+    volumes:
+      - /var/lib/echowear/admin/state:/var/lib/echowear-admin
+      - /var/lib/echowear/admin/password.json:/run/secrets/admin_password_hash:ro
+      - /var/lib/echowear/admin/socket:/run/echowear-admin
   search:
     build:
       context: ../image-search
@@ -68,11 +89,11 @@ services:
     logging:
       driver: none
     environment:
-      YANDEX_FOLDER_ID: ${YANDEX_FOLDER_ID}
+      ECHOWEAR_YANDEX_BUNDLE: /run/echowear-admin-state/yandex.json
     volumes:
       - /var/lib/echowear/decoder-socket:/run/echowear
       - /var/lib/echowear/search-socket:/run/echowear-images
-      - /etc/echowear/yandex_key:/run/secrets/yandex_key:ro
+      - /var/lib/echowear/admin/state:/run/echowear-admin-state:ro
     tmpfs: ['/tmp:rw,noexec,nosuid,nodev,size=16m']
   decoder:
     build:

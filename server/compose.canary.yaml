@@ -1,0 +1,53 @@
+# Synthetic canary only. Paths and images are supplied by test_compose_canary.sh.
+services:
+  gateway:
+    image: ${TEST_NODE_IMAGE:?}
+    network_mode: none
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    entrypoint: [node, /app/gateway-alarm-clock.js]
+    environment:
+      CREDENTIALS_DIRECTORY: /run/credentials
+      TLS_CERT_PATH: /run/certs/cert.pem
+      TLS_KEY_PATH: /run/certs/key.pem
+      GATEWAY_HOSTNAME: unit.example
+      GATEWAY_PORT: '18444'
+      GATEWAY_BIND_ADDRESS: 127.0.0.1
+      UPSTREAM_PORT: '12800'
+    volumes:
+      - ${TEST_LAB_DIR:?}/gateway:/app:ro
+      - ${TEST_DIR:?}/credentials:/run/credentials:ro
+      - ${TEST_DIR:?}/certs:/run/certs:ro
+      - ${TEST_DIR:?}/admin-socket:/run/echowear-admin:ro
+  admin:
+    image: ${TEST_PYTHON_IMAGE:?}
+    network_mode: none
+    user: '10001:10001'
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    entrypoint: [python, -I, /app/app.py]
+    environment:
+      ECHOWEAR_ADMIN_ORIGIN: https://unit.example:18444
+      PYTHONDONTWRITEBYTECODE: '1'
+    volumes:
+      - ${TEST_LAB_DIR:?}/admin:/app:ro
+      - ${TEST_DIR:?}/state:/var/lib/echowear-admin
+      - ${TEST_DIR:?}/password.json:/run/secrets/admin_password_hash:ro
+      - ${TEST_DIR:?}/admin-socket:/run/echowear-admin
+  search:
+    image: ${TEST_PYTHON_IMAGE:?}
+    network_mode: none
+    user: '10001:10001'
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    entrypoint: [python, -I, /app/mock_rotation_provider.py]
+    environment:
+      ECHOWEAR_YANDEX_BUNDLE: /state/yandex.json
+      PYTHONDONTWRITEBYTECODE: '1'
+    volumes:
+      - ${TEST_LAB_DIR:?}/image-search:/app:ro
+      - ${TEST_DIR:?}/state:/state:ro
+      - ${TEST_DIR:?}/search-socket:/run/echowear-images

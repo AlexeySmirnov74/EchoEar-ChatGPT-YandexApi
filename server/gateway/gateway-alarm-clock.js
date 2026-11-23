@@ -6,6 +6,7 @@ const https = require('node:https');
 const fs = require('node:fs');
 const crypto = require('node:crypto');
 const path = require('node:path');
+const {isAdminPath, proxyAdmin} = require('./admin-proxy');
 
 function equalSecret(a, b) {
   const digest = value => crypto.createHash('sha256').update(value, 'utf8').digest();
@@ -35,11 +36,28 @@ function createGateway(config, tls) {
   if (typeof config.hostname !== 'string' || !/^[a-zA-Z0-9.-]+$/.test(config.hostname)) throw new Error('Invalid hostname');
   if (!Number.isInteger(config.publicPort) || config.publicPort < 1 || config.publicPort > 65535) throw new Error('Invalid public port');
   if (!Number.isInteger(config.upstreamPort) || config.upstreamPort < 1 || config.upstreamPort > 65535) throw new Error('Invalid upstream port');
+  const adminSocketPath = config.adminSocketPath ?? '/run/echowear-admin/admin.sock';
+  if (typeof adminSocketPath !== 'string' || !path.posix.isAbsolute(adminSocketPath) || adminSocketPath.includes('\0')) throw new Error('Invalid admin socket path');
+  const adminTimeoutMs = config.adminTimeoutMs ?? 15000;
+  if (!Number.isInteger(adminTimeoutMs) || adminTimeoutMs < 50 || adminTimeoutMs > 15000) throw new Error('Invalid admin timeout');
   const maxSessions = config.maxSessions ?? 2;
   if (!Number.isInteger(maxSessions) || maxSessions < 1 || maxSessions > 2) throw new Error('Invalid session limit');
   let activeSessions = 0;
+  let activeAdminRequests = 0;
   const wsUrl = `wss://${config.hostname}:${config.publicPort}/xiaozhi/ws`;
   const handler = (req, res) => {
+    if (isAdminPath(req.url)) {
+      if (activeAdminRequests >= 4) {
+        res.writeHead(503, {'Cache-Control': 'no-store', 'Connection': 'close'});
+        res.end();
+        req.resume();
+        return;
+      }
+      activeAdminRequests++;
+      res.once('close', () => { activeAdminRequests--; });
+      proxyAdmin(req, res, adminSocketPath, adminTimeoutMs);
+      return;
+    }
     if (req.method !== 'POST' || !equalSecret(req.url, config.otaPath)) {
       res.writeHead(404, {'Cache-Control': 'no-store', 'Connection': 'close'});
       res.end();
@@ -145,7 +163,8 @@ if (require.main === module) {
     hostname: process.env.GATEWAY_HOSTNAME,
     publicPort: Number(process.env.GATEWAY_PORT),
     upstreamPort: Number(process.env.UPSTREAM_PORT || '12800'),
-    otaPath: '/' + read('ota_secret'), token: read('ws_token')
+    otaPath: '/' + read('ota_secret'), token: read('ws_token'),
+    adminSocketPath: process.env.ADMIN_SOCKET_PATH || '/run/echowear-admin/admin.sock'
   };
   const server = createGateway(config, loadTlsCredentials(credentials));
   server.listen(config.publicPort, resolveBindAddress());

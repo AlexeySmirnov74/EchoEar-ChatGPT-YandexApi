@@ -18,19 +18,23 @@ if [[ $(wc -l < "$cfg") -ne 2 || ! $domain =~ ^[A-Za-z0-9][A-Za-z0-9.-]*[A-Za-z0
   echo 'Не удалось проверить параметры; восстановление отменено.' >&2
   exit 1
 fi
-for item in /etc/echowear/openai_key /etc/echowear/yandex_key /etc/echowear/gateway/ota_secret /etc/echowear/gateway/ws_token; do
+for item in /etc/echowear/openai_key /etc/echowear/gateway/ota_secret /etc/echowear/gateway/ws_token /var/lib/echowear/admin/password.json; do
   if [[ ! -s $item || -L $item || $(stat -c %a "$item") != 400 ]]; then
     echo 'Один из файлов ключей отсутствует или имеет неверные права; нужна ручная диагностика.' >&2
     exit 1
   fi
 done
-if [[ $(stat -c '%u:%g' /etc/echowear/openai_key) != 0:0 || $(stat -c '%u:%g' /etc/echowear/yandex_key) != 10001:10001 || $(stat -c '%u:%g' /etc/echowear/gateway/ota_secret) != 0:0 || $(stat -c '%u:%g' /etc/echowear/gateway/ws_token) != 0:0 ]]; then
+if [[ $(stat -c '%u:%g' /etc/echowear/openai_key) != 0:0 || $(stat -c '%u:%g' /var/lib/echowear/admin/password.json) != 10001:10001 || $(stat -c '%u:%g' /etc/echowear/gateway/ota_secret) != 0:0 || $(stat -c '%u:%g' /etc/echowear/gateway/ws_token) != 0:0 ]]; then
   echo 'Владельцы ключей отличаются от ожидаемых; нужна ручная диагностика.' >&2
   exit 1
 fi
-for dir in /var/lib/echowear/data /var/lib/echowear/decoder-socket /var/lib/echowear/search-socket; do
+for dir in /var/lib/echowear/data /var/lib/echowear/decoder-socket /var/lib/echowear/search-socket /var/lib/echowear/admin/state /var/lib/echowear/admin/socket; do
   if [[ ! -d $dir || -L $dir ]]; then echo 'Один из каталогов данных отсутствует; нужна ручная диагностика.' >&2; exit 1; fi
 done
+if [[ ! -s /var/lib/echowear/admin/state/yandex.json || -L /var/lib/echowear/admin/state/yandex.json || $(stat -c '%u:%g:%a' /var/lib/echowear/admin/state/yandex.json) != 10001:10001:600 || $(stat -c '%u:%g:%a' /var/lib/echowear/admin/state) != 10001:10001:700 || $(stat -c '%u:%g:%a' /var/lib/echowear/admin/socket) != 10001:0:2770 ]]; then
+  echo 'Параметры панели неполные или имеют неверные права; требуется ручная диагностика.' >&2
+  exit 1
+fi
 for dir in /var/lib/echowear/decoder-socket /var/lib/echowear/search-socket; do
   if [[ $(stat -c '%u:%g:%a' "$dir") != 10001:0:2770 ]]; then
     echo 'Права каталога сокетов отличаются от ожидаемых; нужна ручная диагностика.' >&2
@@ -41,7 +45,7 @@ if [[ ! -s /etc/letsencrypt/live/$domain/fullchain.pem || ! -s /etc/letsencrypt/
   echo 'Сертификат не найден; сначала восстановите его через certbot.' >&2
   exit 1
 fi
-for service in gateway voice search decoder; do
+for service in gateway voice search decoder admin; do
   names=("echowear-$service-1" "echowear_${service}_1")
   [[ $service == gateway ]] && names=(echowear-gateway)
   for name in "${names[@]}"; do

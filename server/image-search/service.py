@@ -150,8 +150,12 @@ class Handler(http.server.BaseHTTPRequestHandler):
             if not isinstance(value, dict) or set(value) != {'query'}:
                 return self.reply(400)
             query = value['query']
-            adapter.request_body(query, self.server.folder)
-            result = run_search(query, self.server.folder, self.server.key, self.connection)
+            try:
+                folder, key = self.server.credentials()
+            except (OSError, ValueError, json.JSONDecodeError):
+                return self.reply(503, b'Image search credentials unavailable')
+            adapter.request_body(query, folder)
+            result = run_search(query, folder, key, self.connection)
             if result is None:
                 return self.reply(502, b'Image search unavailable')
             if result is NO_RESULTS:
@@ -168,10 +172,16 @@ class Server(socketserver.ThreadingMixIn, socketserver.UnixStreamServer):
     daemon_threads = True
     allow_reuse_address = True
 
-    def __init__(self, address, folder, key, concurrency=2):
+    def __init__(self, address, folder, key, concurrency=2, credential_loader=None):
         self.folder, self.key = folder, key
+        self.credential_loader = credential_loader
         self.slots = threading.BoundedSemaphore(concurrency)
         super().__init__(address, Handler)
+
+    def credentials(self):
+        if self.credential_loader is not None:
+            return self.credential_loader()
+        return self.folder, self.key
 
     def process_request(self, request, client_address):
         if not self.slots.acquire(blocking=False):
@@ -199,24 +209,31 @@ class Server(socketserver.ThreadingMixIn, socketserver.UnixStreamServer):
 
 
 def main():
-    folder = os.environ['YANDEX_FOLDER_ID']
-    with open('/run/secrets/yandex_key', encoding='utf-8') as f:
-        key = f.read(4097).strip()
+    bundle_path = os.environ.get('ECHOWEAR_YANDEX_BUNDLE', '')
+    if bundle_path:
+        from secret_store import read_bundle
+        credential_loader = lambda: read_bundle(bundle_path)
+        folder, key = credential_loader()
+    else:
+        credential_loader = None
+        folder = os.environ['YANDEX_FOLDER_ID']
+        with open('/run/secrets/yandex_key', encoding='utf-8') as f:
+            key = f.read(4097).strip()
     adapter.request_body('test', folder)
     if not key or len(key) > 4096 or '\n' in key or '\r' in key:
         raise SystemExit('Invalid credential')
-    with create_server(SEARCH_SOCKET_PATH, folder, key) as server:
+    with create_server(SEARCH_SOCKET_PATH, folder, key, credential_loader) as server:
         server.serve_forever()
 
 
-def create_server(path, folder, key):
+def create_server(path, folder, key, credential_loader=None):
     try:
         os.unlink(path)
     except FileNotFoundError:
         pass
     old_umask = os.umask(0o077)
     try:
-        server = Server(path, folder, key)
+        server = Server(path, folder, key, credential_loader=credential_loader)
         # The setgid parent directory assigns gid 0 to this socket. Group 0
         # clients can connect without broad directory write access or DAC caps.
         os.chmod(path, 0o660)
