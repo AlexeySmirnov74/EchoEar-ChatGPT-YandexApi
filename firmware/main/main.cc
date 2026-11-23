@@ -27,12 +27,20 @@ extern "C" void app_main(void)
 
     // Initialize NVS flash for WiFi configuration
     esp_err_t ret = nvs_flash_init();
+#if CONFIG_BOARD_TYPE_ECHOEAR_2ST
+    if (ret != ESP_OK) {
+        // Preserve Wi-Fi, alarms and all other settings for recovery.
+        ESP_LOGE(TAG, "NVS initialization failed; settings were preserved");
+        return;
+    }
+#else
     if (ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND) {
         ESP_LOGW(TAG, "Erasing NVS flash to fix corruption");
         ESP_ERROR_CHECK(nvs_flash_erase());
         ret = nvs_flash_init();
     }
     ESP_ERROR_CHECK(ret);
+#endif
 
     // Launch the application
     auto& app = Application::GetInstance();

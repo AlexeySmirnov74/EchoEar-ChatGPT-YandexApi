@@ -42,7 +42,7 @@ fi
 
 export DEBIAN_FRONTEND=noninteractive
 apt-get update
-apt-get install -y docker.io docker-compose-v2 certbot openssl
+apt-get install -y ca-certificates certbot docker.io docker-compose-v2 iproute2 openssl python3
 systemctl enable --now docker
 docker compose version >/dev/null
 for name in echowear-gateway echowear-voice-1 echowear-search-1 echowear-decoder-1 echowear_voice_1 echowear_search_1 echowear_decoder_1; do
