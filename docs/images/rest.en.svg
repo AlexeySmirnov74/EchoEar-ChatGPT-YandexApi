@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 250" role="img" aria-labelledby="title desc">
+  <title id="title">Display rest</title><desc id="desc">A voice command blanks the screen and disconnects; touch starts the wake-up prompt and reconnects. Local alarms keep working.</desc>
+  <defs><marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="#d97706"/></marker></defs>
+  <rect width="1080" height="250" rx="22" fill="#fff9ef"/><text x="35" y="42" font-family="Arial, Noto Sans SC, Microsoft YaHei, sans-serif" font-size="24" font-weight="700" fill="#3f2c18">Rest and wake-up</text>
+  <g font-family="Arial, Noto Sans SC, Microsoft YaHei, sans-serif" fill="#3f2c18"><g fill="#fff" stroke="#f6c978" stroke-width="2"><rect x="32" y="75" width="245" height="105" rx="16"/><rect x="418" y="75" width="245" height="105" rx="16"/><rect x="804" y="75" width="245" height="105" rx="16"/></g>
+  <text x="50" y="108" font-size="18" font-weight="700">Ready</text><text x="50" y="137" font-size="15">Voice: go to sleep</text><text x="436" y="108" font-size="18" font-weight="700">Rest</text><text x="436" y="137" font-size="15">Screen + connection off</text><text x="822" y="108" font-size="18" font-weight="700">Waking up</text><text x="822" y="137" font-size="15">Prompt and reconnect</text></g>
+  <g stroke="#d97706" stroke-width="3" fill="none" marker-end="url(#a)"><path d="M278 128H409"/><path d="M664 128H795"/></g><text x="694" y="114" font-family="Arial, Noto Sans SC, Microsoft YaHei, sans-serif" font-size="14" fill="#725132">touch</text>
+  <text x="35" y="220" font-family="Arial, Noto Sans SC, Microsoft YaHei, sans-serif" font-size="15" fill="#725132">Alarms run locally while the device is powered and its clock is set.</text>
+</svg>

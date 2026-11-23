@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 225" role="img" aria-labelledby="title desc">
+  <title id="title">首次配置流程</title><desc id="desc">准备服务器、备份 Flash、安装固件、配置地址并测试连接。</desc>
+  <defs><marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="#0891b2"/></marker></defs>
+  <rect width="1080" height="225" rx="22" fill="#f0faff"/><text x="35" y="42" font-family="Arial, Noto Sans SC, Microsoft YaHei, sans-serif" font-size="24" font-weight="700" fill="#163047">将 EchoEar 连接到您的服务器</text>
+  <g font-family="Arial, Noto Sans SC, Microsoft YaHei, sans-serif" fill="#163047"><g fill="#fff" stroke="#a5d6e6" stroke-width="2"><rect x="30" y="75" width="225" height="111" rx="16"/><rect x="295" y="75" width="225" height="111" rx="16"/><rect x="560" y="75" width="225" height="111" rx="16"/><rect x="825" y="75" width="225" height="111" rx="16"/></g>
+  <text x="48" y="108" font-size="18" font-weight="700">1. 服务器</text><text x="48" y="137" font-size="15">VPS、HTTPS、API 密钥</text><text x="48" y="160" font-size="15">以及语音服务</text>
+  <text x="313" y="108" font-size="18" font-weight="700">2. USB 备份</text><text x="313" y="137" font-size="15">检查分区布局</text><text x="313" y="160" font-size="15">并备份 Flash</text>
+  <text x="578" y="108" font-size="18" font-weight="700">3. 安装固件</text><text x="578" y="137" font-size="15">写入 USB 固件包</text><text x="578" y="160" font-size="15">保留原有资源</text>
+  <text x="843" y="108" font-size="18" font-weight="700">4. 配置连接</text><text x="843" y="137" font-size="15">保存自己的 OTA URL</text><text x="843" y="160" font-size="15">并测试语音对话</text></g>
+  <g stroke="#0891b2" stroke-width="3" marker-end="url(#a)"><path d="M257 130H287"/><path d="M522 130H552"/><path d="M787 130H817"/></g>
+</svg>

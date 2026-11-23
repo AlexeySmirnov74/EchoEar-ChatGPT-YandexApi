@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 300" role="img" aria-labelledby="title desc">
+  <title id="title">EchoEar 架构</title><desc id="desc">音箱连接自有服务器，由服务器访问 OpenAI、Yandex 搜索和图片来源网站。</desc>
+  <defs><marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="#6366f1"/></marker></defs>
+  <rect width="1080" height="300" rx="22" fill="#f4f6ff"/>
+  <g font-family="Arial, Noto Sans SC, Microsoft YaHei, sans-serif" fill="#18223d"><text x="36" y="43" font-size="24" font-weight="700">语音与图片：请求发送到哪里</text>
+    <rect x="35" y="97" width="210" height="130" rx="18" fill="#fff" stroke="#c6d2f2" stroke-width="2"/><text x="55" y="132" font-size="21" font-weight="700">音箱</text><text x="55" y="161" font-size="16">ESP32-S3 · 屏幕</text><text x="55" y="187" font-size="16">麦克风 · 扬声器</text>
+    <rect x="362" y="97" width="240" height="130" rx="18" fill="#e7eaff" stroke="#6366f1" stroke-width="2"/><text x="383" y="132" font-size="21" font-weight="700">您的 VPS</text><text x="383" y="161" font-size="16">TLS / 语音服务器</text><text x="383" y="187" font-size="16">搜索与图片解码</text>
+    <rect x="762" y="66" width="275" height="60" rx="14" fill="#fff" stroke="#c6d2f2" stroke-width="2"/><text x="784" y="102" font-size="18">OpenAI · 实时语音</text>
+    <rect x="762" y="139" width="275" height="60" rx="14" fill="#fff" stroke="#c6d2f2" stroke-width="2"/><text x="784" y="175" font-size="18">Yandex · 图片搜索</text>
+    <rect x="762" y="212" width="275" height="60" rx="14" fill="#fff" stroke="#c6d2f2" stroke-width="2"/><text x="784" y="248" font-size="18">图片来源网站</text>
+  </g><g stroke="#6366f1" stroke-width="3" fill="none" marker-end="url(#a)"><path d="M246 164H355"/><path d="M603 133L754 96"/><path d="M603 165H754"/><path d="M603 195L754 242"/></g>
+  <text x="271" y="150" font-family="Arial, Noto Sans SC, Microsoft YaHei, sans-serif" font-size="14" fill="#515c7a">Wi‑Fi · WSS</text>
+</svg>

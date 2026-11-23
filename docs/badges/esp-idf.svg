@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="108" height="20" viewBox="0 0 108 20" role="img" aria-label="ESP-IDF: 5.5.1">
+  <title>ESP-IDF: 5.5.1</title>
+  <linearGradient id="shade" x2="0" y2="100%"><stop offset="0" stop-color="#fff" stop-opacity=".12"/><stop offset="1" stop-opacity=".12"/></linearGradient>
+  <clipPath id="round"><rect width="108" height="20" rx="3"/></clipPath>
+  <g clip-path="url(#round)"><rect width="61" height="20" fill="#555"/><rect x="61" width="47" height="20" fill="#00758f"/><rect width="108" height="20" fill="url(#shade)"/></g>
+  <g fill="#fff" text-anchor="middle" font-family="Verdana,DejaVu Sans,Geneva,sans-serif" font-size="11">
+    <text x="30.5" y="15" fill="#010101" fill-opacity=".3">ESP-IDF</text><text x="30.5" y="14">ESP-IDF</text>
+    <text x="84.5" y="15" fill="#010101" fill-opacity=".3">5.5.1</text><text x="84.5" y="14">5.5.1</text>
+  </g>
+</svg>

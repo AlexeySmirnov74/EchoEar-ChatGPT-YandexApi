@@ -1,11 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 225" role="img" aria-labelledby="title desc">
-  <title id="title">Путь первоначальной настройки</title><desc id="desc">Подготовить сервер, сохранить копию USB, настроить адрес OTA, собрать и проверить прошивку.</desc>
+  <title id="title">Путь первоначальной настройки</title><desc id="desc">Подготовить сервер, сохранить резервную копию, записать прошивку, настроить адрес и проверить подключение.</desc>
   <defs><marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="#0891b2"/></marker></defs>
-  <rect width="1080" height="225" rx="22" fill="#f0faff"/><text x="35" y="42" font-family="Arial, sans-serif" font-size="24" font-weight="700" fill="#163047">От исходников к работающей колонке</text>
+  <rect width="1080" height="225" rx="22" fill="#f0faff"/><text x="35" y="42" font-family="Arial, sans-serif" font-size="24" font-weight="700" fill="#163047">Подключаем EchoEar к своему серверу</text>
   <g font-family="Arial, sans-serif" fill="#163047"><g fill="#fff" stroke="#a5d6e6" stroke-width="2"><rect x="30" y="75" width="225" height="111" rx="16"/><rect x="295" y="75" width="225" height="111" rx="16"/><rect x="560" y="75" width="225" height="111" rx="16"/><rect x="825" y="75" width="225" height="111" rx="16"/></g>
   <text x="48" y="108" font-size="18" font-weight="700">1. Сервер</text><text x="48" y="137" font-size="15">VPS, HTTPS, ключи API</text><text x="48" y="160" font-size="15">и голосовой сервис</text>
-  <text x="313" y="108" font-size="18" font-weight="700">2. USB-копия</text><text x="313" y="137" font-size="15">Определить плату</text><text x="313" y="160" font-size="15">и сохранить flash</text>
-  <text x="578" y="108" font-size="18" font-weight="700">3. Сборка</text><text x="578" y="137" font-size="15">Задать свой OTA URL</text><text x="578" y="160" font-size="15">и собрать ESP-IDF</text>
-  <text x="843" y="108" font-size="18" font-weight="700">4. Проверка</text><text x="843" y="137" font-size="15">Записать совместимый</text><text x="843" y="160" font-size="15">образ и проверить связь</text></g>
+  <text x="313" y="108" font-size="18" font-weight="700">2. USB-копия</text><text x="313" y="137" font-size="15">Проверить разметку</text><text x="313" y="160" font-size="15">и сохранить flash</text>
+  <text x="578" y="108" font-size="18" font-weight="700">3. Прошивка</text><text x="578" y="137" font-size="15">Записать USB-пакет</text><text x="578" y="160" font-size="15">сохранив ресурсы</text>
+  <text x="843" y="108" font-size="18" font-weight="700">4. Подключение</text><text x="843" y="137" font-size="15">Сохранить OTA URL</text><text x="843" y="160" font-size="15">и проверить разговор</text></g>
   <g stroke="#0891b2" stroke-width="3" marker-end="url(#a)"><path d="M257 130H287"/><path d="M522 130H552"/><path d="M787 130H817"/></g>
 </svg>
