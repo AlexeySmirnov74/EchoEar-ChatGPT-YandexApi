@@ -1,0 +1,15 @@
+# Optional workaround when Docker's build network cannot resolve DNS.
+# This affects build steps only; it does not change runtime networking.
+services:
+  voice:
+    build:
+      network: host
+  gateway:
+    build:
+      network: host
+  search:
+    build:
+      network: host
+  decoder:
+    build:
+      network: host

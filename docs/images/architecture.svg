@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 300" role="img" aria-labelledby="title desc">
+  <title id="title">Архитектура EchoEar</title><desc id="desc">Колонка подключается к собственному серверу, который обращается к OpenAI, Яндекс Поиску и сайтам изображений.</desc>
+  <defs><marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="#6366f1"/></marker></defs>
+  <rect width="1080" height="300" rx="22" fill="#f4f6ff"/>
+  <g font-family="Arial, sans-serif" fill="#18223d"><text x="36" y="43" font-size="24" font-weight="700">Голос и изображения: куда идут запросы</text>
+    <rect x="35" y="97" width="210" height="130" rx="18" fill="#fff" stroke="#c6d2f2" stroke-width="2"/><text x="55" y="132" font-size="21" font-weight="700">Колонка</text><text x="55" y="161" font-size="16">ESP32-S3 · экран</text><text x="55" y="187" font-size="16">микрофон · динамик</text>
+    <rect x="362" y="97" width="240" height="130" rx="18" fill="#e7eaff" stroke="#6366f1" stroke-width="2"/><text x="383" y="132" font-size="21" font-weight="700">Ваш VPS</text><text x="383" y="161" font-size="16">TLS / голосовой сервер</text><text x="383" y="187" font-size="16">поиск и обработка</text>
+    <rect x="762" y="66" width="275" height="60" rx="14" fill="#fff" stroke="#c6d2f2" stroke-width="2"/><text x="784" y="102" font-size="18">OpenAI · голосовой ответ</text>
+    <rect x="762" y="139" width="275" height="60" rx="14" fill="#fff" stroke="#c6d2f2" stroke-width="2"/><text x="784" y="175" font-size="18">Яндекс · поиск картинок</text>
+    <rect x="762" y="212" width="275" height="60" rx="14" fill="#fff" stroke="#c6d2f2" stroke-width="2"/><text x="784" y="248" font-size="18">Сайты изображений</text>
+  </g><g stroke="#6366f1" stroke-width="3" fill="none" marker-end="url(#a)"><path d="M246 164H355"/><path d="M603 133L754 96"/><path d="M603 165H754"/><path d="M603 195L754 242"/></g>
+  <text x="271" y="150" font-family="Arial, sans-serif" font-size="14" fill="#515c7a">Wi‑Fi · WSS</text>
+</svg>

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 250" role="img" aria-labelledby="title desc">
+  <title id="title">Режим отдыха</title><desc id="desc">Голосовая команда гасит экран и закрывает соединение; касание запускает приветствие и повторное подключение. Будильник продолжает работать.</desc>
+  <defs><marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="#d97706"/></marker></defs>
+  <rect width="1080" height="250" rx="22" fill="#fff9ef"/><text x="35" y="42" font-family="Arial, sans-serif" font-size="24" font-weight="700" fill="#3f2c18">Отдых и пробуждение</text>
+  <g font-family="Arial, sans-serif" fill="#3f2c18"><g fill="#fff" stroke="#f6c978" stroke-width="2"><rect x="32" y="75" width="245" height="105" rx="16"/><rect x="418" y="75" width="245" height="105" rx="16"/><rect x="804" y="75" width="245" height="105" rx="16"/></g>
+  <text x="50" y="108" font-size="18" font-weight="700">Обычный режим</text><text x="50" y="137" font-size="15">«Иди спать»</text><text x="436" y="108" font-size="18" font-weight="700">Отдых</text><text x="436" y="137" font-size="15">Экран и соединение выкл.</text><text x="822" y="108" font-size="18" font-weight="700">Пробуждение</text><text x="822" y="137" font-size="15">Фраза и подключение</text></g>
+  <g stroke="#d97706" stroke-width="3" fill="none" marker-end="url(#a)"><path d="M278 128H409"/><path d="M664 128H795"/></g><text x="694" y="114" font-family="Arial, sans-serif" font-size="14" fill="#725132">касание</text>
+  <text x="35" y="220" font-family="Arial, sans-serif" font-size="15" fill="#725132">Будильник работает локально, пока колонка включена и её часы установлены.</text>
+</svg>

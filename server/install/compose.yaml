@@ -1,0 +1,93 @@
+name: echowear
+services:
+  voice:
+    build:
+      context: ..
+      dockerfile: install/voice.Dockerfile
+    restart: unless-stopped
+    init: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    pids_limit: 150
+    mem_limit: 512m
+    logging:
+      driver: none
+    ports:
+      - "127.0.0.1:12800:12800"
+    environment:
+      STACKCHAN_DATA_DIR: /data
+      STACKCHAN_LOCAL_HOST: 127.0.0.1
+      STACKCHAN_AI_PROVIDER: openai
+      STACKCHAN_OPENAI_REALTIME_MODEL: gpt-realtime
+      STACKCHAN_OPENAI_TTS_VOICE: alloy
+      STACKCHAN_CONVERSATION_HISTORY_ENABLED: 'false'
+      STACKCHAN_CONVERSATION_IDLE_SECONDS: '0'
+      STACKCHAN_STANDALONE_HA_ENABLED: 'false'
+      STACKCHAN_SYSTEM_PROMPT: 'Отвечай по-русски, доброжелательно и понятно ребёнку. Говори коротко и естественно.'
+    volumes:
+      - /var/lib/echowear/data:/data
+      - /var/lib/echowear/search-socket:/data/image-experiment-search
+      - /etc/echowear/openai_key:/run/secrets/openai_key:ro
+  gateway:
+    build:
+      context: ..
+      dockerfile: install/gateway.Dockerfile
+    container_name: echowear-gateway
+    restart: unless-stopped
+    network_mode: host
+    read_only: true
+    init: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    pids_limit: 64
+    mem_limit: 128m
+    logging:
+      driver: none
+    environment:
+      CREDENTIALS_DIRECTORY: /run/credentials
+      TLS_CERT_PATH: /run/certs/live/${ECHOWEAR_DOMAIN}/fullchain.pem
+      TLS_KEY_PATH: /run/certs/live/${ECHOWEAR_DOMAIN}/privkey.pem
+      GATEWAY_HOSTNAME: ${ECHOWEAR_DOMAIN}
+      GATEWAY_PORT: '18444'
+      GATEWAY_BIND_ADDRESS: 0.0.0.0
+      UPSTREAM_PORT: '12800'
+    volumes:
+      - /etc/echowear/gateway:/run/credentials:ro
+      - /etc/letsencrypt:/run/certs:ro
+  search:
+    build:
+      context: ../image-search
+    restart: unless-stopped
+    user: '10001:10001'
+    init: true
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    pids_limit: 32
+    mem_limit: 256m
+    logging:
+      driver: none
+    environment:
+      YANDEX_FOLDER_ID: ${YANDEX_FOLDER_ID}
+    volumes:
+      - /var/lib/echowear/decoder-socket:/run/echowear
+      - /var/lib/echowear/search-socket:/run/echowear-images
+      - /etc/echowear/yandex_key:/run/secrets/yandex_key:ro
+    tmpfs: ['/tmp:rw,noexec,nosuid,nodev,size=16m']
+  decoder:
+    build:
+      context: ../image-decoder
+    restart: unless-stopped
+    network_mode: none
+    user: '10001:10001'
+    init: true
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    pids_limit: 16
+    mem_limit: 320m
+    logging:
+      driver: none
+    volumes:
+      - /var/lib/echowear/decoder-socket:/run/echowear
+    tmpfs: ['/tmp:rw,noexec,nosuid,nodev,size=16m']

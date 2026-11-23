@@ -1,0 +1,39 @@
+name: echowear-image-experiment
+services:
+  search:
+    image: echowear/yandex-image-experiment:no-results-1
+    build: .
+    restart: unless-stopped
+    user: "10001:10001"
+    init: true
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    pids_limit: 32
+    mem_limit: 256m
+    cpus: 0.75
+    environment:
+      YANDEX_FOLDER_ID: "${YANDEX_FOLDER_ID:?set YANDEX_FOLDER_ID}"
+    volumes:
+      - "${ECHOWEAR_IMAGE_SOCKET_DIR:?set ECHOWEAR_IMAGE_SOCKET_DIR}:/run/echowear"
+      - "${ECHOWEAR_SEARCH_SOCKET_DIR:?set ECHOWEAR_SEARCH_SOCKET_DIR}:/run/echowear-images"
+      - "${ECHOWEAR_YANDEX_KEY_PATH:?set ECHOWEAR_YANDEX_KEY_PATH}:/run/secrets/yandex_key:ro"
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,nodev,size=16m
+  decoder:
+    image: echowear/yandex-image-experiment:groupfix
+    restart: unless-stopped
+    user: "10001:10001"
+    command: ["python", "-I", "/app/decoder_service.py"]
+    network_mode: none
+    init: true
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    pids_limit: 16
+    mem_limit: 320m
+    cpus: 0.75
+    volumes:
+      - "${ECHOWEAR_IMAGE_SOCKET_DIR:?set ECHOWEAR_IMAGE_SOCKET_DIR}:/run/echowear"
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,nodev,size=16m

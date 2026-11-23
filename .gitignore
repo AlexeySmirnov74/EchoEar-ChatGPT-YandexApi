@@ -1,0 +1,32 @@
+# Local configuration and secrets
+.env
+.env.*
+!.env.example
+secrets/
+**/secrets/
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Firmware build output and device-specific settings
+firmware/sdkconfig
+firmware/sdkconfig.old
+firmware/build/
+firmware/managed_components/
+firmware/.dependencies.lock
+
+# Runtime, diagnostics, private backups
+logs/
+**/logs/
+backups/
+**/backups/
+*.bin
+*.elf
+*.map
+*.pyc
+__pycache__/
+.pytest_cache/
+*.db
+*.sqlite
+*.sqlite3
