@@ -69,7 +69,7 @@ sudo bash server/install/show-ota.sh
 
 ## Готовая прошивка и установка по USB
 
-Скомпилированная прошивка опубликована в [GitHub Releases](https://github.com/AlexeySmirnov74/EchoEar-ChatGPT-YandexApi/releases). Для EchoEar-2ST **без BaseBoard**, ESP32-S3, 16 MiB flash и 8 MiB PSRAM используйте USB-пакет `v0.2.0-experimental`. Он обновляет приложение и сохраняет заводские ресурсы дисплея и настройки; персональные адреса и API-ключи в бинарник не включены.
+Скомпилированная прошивка опубликована в [GitHub Releases](https://github.com/AlexeySmirnov74/EchoEar-ChatGPT-YandexApi/releases). Для EchoEar-2ST **без BaseBoard**, ESP32-S3, 16 MiB flash и 8 MiB PSRAM используйте USB-пакет `v0.2.0`. Он обновляет приложение и сохраняет заводские ресурсы дисплея и настройки; персональные адреса и API-ключи в бинарник не включены.
 
 **[Пошаговая инструкция по прошивке, резервному копированию и восстановлению](docs/FLASHING.md)** содержит команды для Windows и Linux, проверку разметки и полного результата записи. Этот пакет требует существующих совместимых ресурсов; для полностью стёртого чипа он не подходит.
 
